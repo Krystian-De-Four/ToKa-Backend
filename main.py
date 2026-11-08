@@ -1,0 +1,33 @@
+from fastapi import FastAPI 
+from fastapi.middleware.cors import CORSMiddleware 
+
+from routes.signup_routes import signup_router
+from routes.login_routes import login_router
+ 
+app = FastAPI() 
+
+app.add_middleware( 
+    CORSMiddleware, 
+    allow_origins=["*"], 
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+) 
+
+app.include_router(
+    signup_router,
+    prefix="/signup",
+    tags=["Signup"]
+)
+
+app.include_router(
+    login_router,
+    prefix="/login",
+    tags=["Login"]
+)
+
+ 
+# this is a testing endpoint for 
+# easily seeing if our app crashed
+@app.get("/") 
+def get_test(): 
+    return {"hello": "world"}
