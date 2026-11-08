@@ -4,3 +4,4 @@ class RegisterForm(BaseModel):
     email: str
     username: str
     password: str
+    
