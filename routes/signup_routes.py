@@ -12,6 +12,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 @signup_router.post("")
 def signup_user(form: RegisterForm):
+
+    #checks if account isnt of the any ones we have before continuing
+    if form.account_type not in ["free", "plus", "extra"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid account type."
+        )
+
     try:
         #password is hashed before saving
         hashed_bytes = bcrypt.hashpw(form.password.encode('utf-8'), bcrypt.gensalt())
@@ -21,7 +29,7 @@ def signup_user(form: RegisterForm):
             "email": form.email,
             "username": form.username,
             "password": hashed_password,
-            "account_type": "free"
+            "account_type": form.account_type
         })
 
     except DuplicateKeyError:
