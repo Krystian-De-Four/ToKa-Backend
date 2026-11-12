@@ -32,3 +32,37 @@ app.include_router(
 @app.get("/") 
 def get_test(): 
     return {"hello": "world"}
+
+
+@app.put("/update") #put is used to change data
+def update_profile(data: dict):
+    current_email = data.get("current_email")
+    new_username = data.get("username")
+    new_email = data.get("email")
+
+    #check if new email is already in use
+    if new_mail !=current_email:
+        existing = db.users.find_one({"email" : new_email})
+        if existing:
+            raiseHTTPException(status_code=400, detail="Email already in use")
+
+
+        #if not, update the email
+    result = db.users.update_one(
+        {"email" : current_email},
+        { "$set":{
+            "username" : new_username,
+            "email" : new_email
+        }}
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="user not found")
+
+    return {
+        "message":"profile updated",
+        "username":new_username,
+        "email":new_email
+       }
+
+    #return a success message and refresh page after to see changes
