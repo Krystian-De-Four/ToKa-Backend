@@ -1,5 +1,7 @@
-from fastapi import FastAPI 
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware 
+
+from database import db
 
 from routes.signup_routes import signup_router
 from routes.login_routes import login_router
@@ -35,13 +37,14 @@ def get_test():
 
 
 @app.put("/update") #put is used to change data
+
 def update_profile(data: dict):
     current_email = data.get("current_email")
     new_username = data.get("username")
     new_email = data.get("email")
 
     #check if new email is already in use
-    if new_mail !=current_email:
+    if new_email !=current_email:
         existing = db.users.find_one({"email" : new_email})
         if existing:
             raiseHTTPException(status_code=400, detail="Email already in use")
