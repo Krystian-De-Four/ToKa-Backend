@@ -10,8 +10,7 @@ EMAIL_FIELD = "email"
 
 
 def email_filter(email: str):
-    # case-insensitive exact match
-    return {EMAIL_FIELD: {"$regex": f"^{re.escape(email)}$", "$options": "i"}}
+    return {EMAIL_FIELD: email}
 
 
 @profile_router.put("")
@@ -36,10 +35,6 @@ def update_profile(data: dict):
     )
 
     if result.matched_count == 0:
-        # helps you see what's wrong: shows in the uvicorn terminal
-        print("NOT FOUND. Looked for:", repr(current_email))
-        print("Collections in db:", db.list_collection_names())
-        print("Sample doc in", COLLECTION, ":", users.find_one())
         raise HTTPException(status_code=404, detail="User not found")
 
     return {

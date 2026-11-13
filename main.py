@@ -1,3 +1,6 @@
+import os
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
