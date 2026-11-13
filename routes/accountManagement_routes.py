@@ -9,6 +9,7 @@ COLLECTION = "users"
 EMAIL_FIELD = "email"
 
 
+
 def email_filter(email: str):
     return {EMAIL_FIELD: email}
 
